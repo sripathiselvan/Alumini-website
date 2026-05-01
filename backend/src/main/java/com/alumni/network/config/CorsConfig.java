@@ -11,7 +11,7 @@ public class CorsConfig {
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
+            public void addCorsMappings(@org.springframework.lang.NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("*") // In production, replace with specific origins
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

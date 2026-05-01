@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -70,7 +69,7 @@ public class AdminController {
 
     /** Delete any post */
     @DeleteMapping("/posts/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable Long id) {
+    public ResponseEntity<?> deletePost(@PathVariable @org.springframework.lang.NonNull Long id) {
         if (!postRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -80,7 +79,7 @@ public class AdminController {
 
     /** Delete any job */
     @DeleteMapping("/jobs/{id}")
-    public ResponseEntity<?> deleteJob(@PathVariable Long id) {
+    public ResponseEntity<?> deleteJob(@PathVariable @org.springframework.lang.NonNull Long id) {
         if (!jobRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
@@ -90,7 +89,7 @@ public class AdminController {
 
     /** Delete any event */
     @DeleteMapping("/events/{id}")
-    public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
+    public ResponseEntity<?> deleteEvent(@PathVariable @org.springframework.lang.NonNull Long id) {
         if (!eventRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

@@ -104,7 +104,7 @@ public class ProfileController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileDto> getProfileById(@PathVariable Long id) {
+    public ResponseEntity<ProfileDto> getProfileById(@PathVariable @org.springframework.lang.NonNull Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Profile profile = profileRepository.findByUserId(user.getId()).orElse(null);

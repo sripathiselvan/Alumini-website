@@ -65,7 +65,7 @@ public class ConnectionController {
 
     /** Send a connection request to another user */
     @PostMapping("/send/{userId}")
-    public ResponseEntity<?> sendRequest(@PathVariable Long userId) {
+    public ResponseEntity<?> sendRequest(@PathVariable @org.springframework.lang.NonNull Long userId) {
         User me = getCurrentUser();
         if (me.getId().equals(userId)) {
             return ResponseEntity.badRequest().body("Cannot connect to yourself.");
@@ -87,7 +87,7 @@ public class ConnectionController {
 
     /** Accept an incoming connection request */
     @PutMapping("/accept/{connectionId}")
-    public ResponseEntity<?> acceptRequest(@PathVariable Long connectionId) {
+    public ResponseEntity<?> acceptRequest(@PathVariable @org.springframework.lang.NonNull Long connectionId) {
         User me = getCurrentUser();
         Connection connection = connectionRepository.findById(connectionId)
                 .orElseThrow(() -> new RuntimeException("Connection not found"));
@@ -105,7 +105,7 @@ public class ConnectionController {
 
     /** Reject (or withdraw) a connection request */
     @PutMapping("/reject/{connectionId}")
-    public ResponseEntity<?> rejectRequest(@PathVariable Long connectionId) {
+    public ResponseEntity<?> rejectRequest(@PathVariable @org.springframework.lang.NonNull Long connectionId) {
         User me = getCurrentUser();
         Connection connection = connectionRepository.findById(connectionId)
                 .orElseThrow(() -> new RuntimeException("Connection not found"));
