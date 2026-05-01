@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlumniNexus – Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">⬡</div>
+      <div class="logo-text">AlumniNexus</div>
+    </div>
+    
+    <div class="sidebar-user">
+      <div class="user-avatar" id="navAvatar">U</div>
+      <div class="user-info">
+        <div class="user-name" id="navName">Loading...</div>
+        <div class="user-role" id="navRole">Student</div>
+      </div>
+    </div>
+    
+    <nav id="navMenu">
+      <a class="nav-item active" data-target="dashboard" onclick="navigate('dashboard')">
+        <span class="icon">📊</span> Dashboard
+      </a>
+      <a class="nav-item" data-target="directory" onclick="navigate('directory')">
+        <span class="icon">👥</span> Alumni Directory
+      </a>
+      <a class="nav-item" data-target="feed" onclick="navigate('feed')">
+        <span class="icon">📰</span> News Feed
+      </a>
+      <a class="nav-item" data-target="jobs" onclick="navigate('jobs')">
+        <span class="icon">💼</span> Job Board
+      </a>
+      <a class="nav-item" data-target="events" onclick="navigate('events')">
+        <span class="icon">📅</span> Events
+      </a>
+      <a class="nav-item" data-target="connections" onclick="navigate('connections')">
+        <span class="icon">🤝</span> Connections
+      </a>
+      <a class="nav-item" data-target="admin" id="adminNavItem" onclick="navigate('admin')" style="display:none;">
+        <span class="icon">🛡️</span> Admin Panel
+      </a>
+    </nav>
+    
+    <div class="sidebar-bottom">
+      <button class="btn-logout" onclick="doLogout()">⏻ Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main id="main-content">
+    <!-- TOPBAR -->
+    <header id="topbar">
+      <div class="page-title" id="pageTitle">Dashboard</div>
+      <div class="topbar-actions">
+        <button class="icon-btn">🔔</button>
+        <button class="icon-btn" onclick="openProfileModal()">👤</button>
+      </div>
+    </header>
+
+    <!-- PAGE CONTAINER -->
+    <div class="page-container">
+      
+      <!-- DASHBOARD PAGE -->
+      <section class="page active" id="page-dashboard">
+        <div class="welcome-banner">
+          <h1>Welcome back, <span id="welcomeName" class="gradient-text">User</span>!</h1>
+          <p>Here is what is happening in your alumni network today.</p>
+        </div>
+        
+        <div class="grid-4 stats-grid">
+          <div class="stat-card">
+            <div class="stat-title">Total Members</div>
+            <div class="stat-value" id="dashStatUsers">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Job Postings</div>
+            <div class="stat-value" id="dashStatJobs">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Upcoming Events</div>
+            <div class="stat-value" id="dashStatEvents">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-title">Connections</div>
+            <div class="stat-value" id="dashStatConnections">—</div>
+          </div>
+        </div>
+
+        <div class="grid-2 mt-2">
+          <div class="card panel">
+            <h3>Recent Activity</h3>
+            <div class="empty-state">No recent activity found.</div>
+          </div>
+          <div class="card panel">
+            <h3>Upcoming Events</h3>
+            <div class="empty-state">No events scheduled.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DIRECTORY PAGE -->
+      <section class="page" id="page-directory">
+        <h2>Alumni Directory</h2>
+        <p class="text-muted">Search and connect with fellow alumni.</p>
+        <div class="search-box mt-2">
+          <input type="text" id="dirSearch" placeholder="Search by name, company, or skills..." class="inp" onkeyup="if(event.key==='Enter') window.loadDirectory()">
+          <button class="btn-primary" style="width: auto;" onclick="window.loadDirectory()">Search</button>
+        </div>
+        <div id="directoryGrid" class="grid-4 mt-2">
+          <!-- Profiles injected here -->
+        </div>
+      </section>
+
+      <!-- FEED PAGE -->
+      <section class="page" id="page-feed">
+        <h2>News Feed</h2>
+        <p class="text-muted">See what's happening in your network.</p>
+
+        <!-- Compose Box -->
+        <div class="card panel mt-2" style="padding: 1.5rem;">
+          <textarea id="postContent" class="inp" rows="3" placeholder="Share an update, achievement, or news..." style="resize:none;"></textarea>
+          <div style="display:flex; justify-content:flex-end; margin-top:1rem;">
+            <button class="btn-primary" onclick="submitPost()">Post Update</button>
+          </div>
+        </div>
+
+        <!-- Feed Grid -->
+        <div id="feedGrid" style="display:flex; flex-direction:column; gap:1rem; margin-top:2rem;">
+          <div class="empty-state">Loading posts...</div>
+        </div>
+      </section>
+
+      <!-- JOBS PAGE -->
+      <section class="page" id="page-jobs">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+          <div>
+            <h2 style="margin-bottom:0.25rem;">Job Board</h2>
+            <p class="text-muted">Discover and share career opportunities across the network.</p>
+          </div>
+          <button class="btn-primary" style="width:auto; padding:0.75rem 1.5rem;" onclick="openJobModal()">+ Post a Job</button>
+        </div>
+        <div class="search-box" style="margin-bottom:2rem;">
+          <input type="text" id="jobSearch" placeholder="Search by title or company..." class="inp" style="margin-bottom:0;" onkeyup="if(event.key==='Enter') window.loadJobs()">
+          <button class="btn-primary" style="width:auto;" onclick="window.loadJobs()">Search</button>
+        </div>
+        <div id="jobGrid" style="display:flex; flex-direction:column; gap:1rem;">
+          <div class="empty-state">Loading jobs...</div>
+        </div>
+      </section>
+
+      <!-- EVENTS PAGE -->
+      <section class="page" id="page-events">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+          <div>
+            <h2 style="margin-bottom:0.25rem;">Events Calendar</h2>
+            <p class="text-muted">Stay connected through reunions, seminars, and webinars.</p>
+          </div>
+          <button class="btn-primary" style="width:auto; padding:0.75rem 1.5rem;" onclick="openEventModal()">+ Create Event</button>
+        </div>
+        <div id="eventGrid" style="display:flex; flex-direction:column; gap:1rem;">
+          <div class="empty-state">Loading events...</div>
+        </div>
+      </section>
+
+      <!-- CONNECTIONS PAGE -->
+      <section class="page" id="page-connections">
+        <div style="margin-bottom:2rem;">
+          <h2 style="margin-bottom:0.25rem;">My Connections</h2>
+          <p class="text-muted">Manage your network and incoming connection requests.</p>
+        </div>
+
+        <!-- Pending Requests -->
+        <div class="card panel" style="margin-bottom:1.5rem;">
+          <h3 style="display:flex; align-items:center; gap:0.75rem;">
+            📬 Pending Requests
+            <span id="pendingCount" style="background:var(--primary); color:#fff; font-size:0.75rem; padding:0.15rem 0.6rem; border-radius:20px;">0</span>
+          </h3>
+          <div id="pendingGrid" style="display:flex; flex-direction:column; gap:0.75rem; margin-top:1rem;">
+            <div class="empty-state">No pending requests.</div>
+          </div>
+        </div>
+
+        <!-- Accepted Connections -->
+        <div>
+          <h3 style="margin-bottom:1rem;">🤝 My Network</h3>
+          <div id="connectionsGrid" class="grid-4">
+            <div style="grid-column: 1 / -1;" class="empty-state">No connections yet. Visit the Alumni Directory to connect!</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN PAGE -->
+      <section class="page" id="page-admin">
+        <div style="margin-bottom:2rem;">
+          <h2 style="margin-bottom:0.25rem;">🛡️ Admin Panel</h2>
+          <p class="text-muted">Platform oversight and content moderation.</p>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="grid-4" style="margin-bottom:2rem;">
+          <div class="stat-card"><div class="stat-title">Total Users</div><div class="stat-value" id="adminStatUsers">—</div></div>
+          <div class="stat-card"><div class="stat-title">Total Posts</div><div class="stat-value" id="adminStatPosts">—</div></div>
+          <div class="stat-card"><div class="stat-title">Total Jobs</div><div class="stat-value" id="adminStatJobs">—</div></div>
+          <div class="stat-card"><div class="stat-title">Total Events</div><div class="stat-value" id="adminStatEvents">—</div></div>
+        </div>
+
+        <!-- Tabs -->
+        <div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+          <button class="btn-primary" style="width:auto;" onclick="window.adminShowTab('users')">👤 Users</button>
+          <button class="btn-primary" style="width:auto; background:var(--surface);" onclick="window.adminShowTab('posts')">📝 Moderate Posts</button>
+        </div>
+
+        <div id="adminUsersTab">
+          <div id="adminUsersGrid" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <div class="empty-state">Loading users...</div>
+          </div>
+        </div>
+        <div id="adminPostsTab" style="display:none;">
+          <div id="adminPostsGrid" style="display:flex; flex-direction:column; gap:0.75rem;">
+            <div class="empty-state">Loading posts...</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- POST A JOB MODAL -->
+<div id="jobModal" class="modal-overlay" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Post a Job</h3>
+      <button class="icon-btn" onclick="closeJobModal()" style="background:none;border:none;">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Job Title *</label>
+          <input type="text" id="jobTitle" class="inp" placeholder="e.g. Software Engineer">
+        </div>
+        <div class="form-group">
+          <label>Company *</label>
+          <input type="text" id="jobCompany" class="inp" placeholder="e.g. Google">
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="jobLocation" class="inp" placeholder="e.g. Bangalore, India or Remote">
+        </div>
+        <div class="form-group">
+          <label>Job Type</label>
+          <select id="jobType" class="inp">
+            <option value="FULL_TIME">Full Time</option>
+            <option value="PART_TIME">Part Time</option>
+            <option value="INTERNSHIP">Internship</option>
+            <option value="REMOTE">Remote</option>
+            <option value="CONTRACT">Contract</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="jobDescription" class="inp" rows="4" placeholder="Describe the role, responsibilities, requirements..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Apply Link (URL or Email)</label>
+        <input type="text" id="jobApplyLink" class="inp" placeholder="https://... or hr@company.com">
+      </div>
+      <button class="btn-primary" onclick="submitJob()">Post Job</button>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE EVENT MODAL -->
+<div id="eventModal" class="modal-overlay" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Create Event</h3>
+      <button class="icon-btn" onclick="closeEventModal()" style="background:none;border:none;">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Event Title *</label>
+        <input type="text" id="eventTitle" class="inp" placeholder="e.g. Alumni Annual Reunion 2026">
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Date & Time *</label>
+          <input type="datetime-local" id="eventDate" class="inp">
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="eventLocation" class="inp" placeholder="e.g. Main Auditorium or Online">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Organizer</label>
+        <input type="text" id="eventOrganizer" class="inp" placeholder="e.g. Alumni Association">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="eventDescription" class="inp" rows="3" placeholder="What's this event about?"></textarea>
+      </div>
+      <button class="btn-primary" onclick="submitEvent()">Create Event</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div id="profileModal" class="modal-overlay" style="display:none;">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Edit Profile</h3>
+      <button class="icon-btn" onclick="closeProfileModal()" style="background:none;border:none;">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="profName" class="inp">
+        </div>
+        <div class="form-group">
+          <label>Department</label>
+          <input type="text" id="profDept" class="inp">
+        </div>
+        <div class="form-group">
+          <label>Batch Year</label>
+          <input type="text" id="profBatch" class="inp">
+        </div>
+        <div class="form-group">
+          <label>Location</label>
+          <input type="text" id="profLoc" class="inp">
+        </div>
+        <div class="form-group">
+          <label>Company</label>
+          <input type="text" id="profComp" class="inp">
+        </div>
+        <div class="form-group">
+          <label>Designation</label>
+          <input type="text" id="profDesig" class="inp">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Skills (comma separated)</label>
+        <input type="text" id="profSkills" class="inp">
+      </div>
+      <div class="form-group">
+        <label>Bio</label>
+        <textarea id="profBio" class="inp" rows="3"></textarea>
+      </div>
+      <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

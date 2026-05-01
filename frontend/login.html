@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlumniNexus – Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="loginPage">
+  <div class="login-wrap">
+
+    <!-- LEFT PANEL -->
+    <div class="login-left">
+      <div class="logo-mark">
+        <div class="logo-icon">⬡</div>
+        <div class="logo-text">AlumniNexus</div>
+      </div>
+      <div class="login-title">Connect. Grow.<br><span>Lead the Future.</span></div>
+      <div class="login-sub">
+        The advanced alumni intelligence platform for Mahalingam College of Engineering and Technology.
+      </div>
+      
+      <div class="stats-row">
+        <div class="stat-chip"><div class="n">2,847</div><div class="l">Alumni</div></div>
+        <div class="stat-chip"><div class="n">412</div><div class="l">Mentors</div></div>
+        <div class="stat-chip"><div class="n">148</div><div class="l">Companies</div></div>
+        <div class="stat-chip"><div class="n">96%</div><div class="l">Placement</div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="login-right">
+
+      <!-- LOGIN FORM -->
+      <div id="loginForm">
+        <div class="form-title">Welcome Back</div>
+        
+        <div class="role-tabs">
+          <button class="role-tab active" data-role="student">Student</button>
+          <button class="role-tab" data-role="alumni">Alumni</button>
+          <button class="role-tab" data-role="admin">Admin</button>
+        </div>
+
+        <input class="inp" id="loginUsername" type="text" placeholder="Username">
+        <input class="inp" id="loginPass" type="password" placeholder="Password">
+        
+        <button class="btn-primary" id="btnLogin">Sign In →</button>
+        
+        <div class="login-switch">
+          No account? <a id="showRegister">Create one</a>
+        </div>
+
+        <div class="demo-hint">
+          <strong>Demo Accounts (password: password123)</strong><br>
+          Student: <strong>teststudent</strong> | Alumni: <strong>testalumni</strong><br>
+          Admin: <strong>admin</strong> (pass: admin123)
+        </div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="registerForm" style="display:none;">
+        <div class="form-title">Create Account</div>
+        
+        <div class="role-tabs">
+          <button class="role-tab active" data-reg-role="student">Student</button>
+          <button class="role-tab" data-reg-role="alumni">Alumni</button>
+        </div>
+
+        <input class="inp" id="regUsername" type="text" placeholder="Username">
+        <input class="inp" id="regEmail" type="email" placeholder="Email address">
+        <input class="inp" id="regPass" type="password" placeholder="Password">
+        
+        <button class="btn-primary" id="btnRegister">Create Account →</button>
+        
+        <div class="login-switch">
+          Have an account? <a id="showLogin">Sign in</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Use module so we can import auth.js -->
+<script type="module">
+  import { login, register } from './assets/js/auth.js';
+
+  // State
+  let currentRole = 'student';
+  let currentRegRole = 'student';
+
+  // DOM Elements
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+  const toastContainer = document.getElementById('toast');
+
+  // UI Toggles
+  document.getElementById('showRegister').onclick = () => {
+    loginForm.style.display = 'none';
+    registerForm.style.display = 'block';
+  };
+  
+  document.getElementById('showLogin').onclick = () => {
+    registerForm.style.display = 'none';
+    loginForm.style.display = 'block';
+  };
+
+  // Role Selection (Login)
+  document.querySelectorAll('#loginForm .role-tab').forEach(tab => {
+    tab.onclick = (e) => {
+      document.querySelectorAll('#loginForm .role-tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      currentRole = e.target.getAttribute('data-role');
+    };
+  });
+
+  // Role Selection (Register)
+  document.querySelectorAll('#registerForm .role-tab').forEach(tab => {
+    tab.onclick = (e) => {
+      document.querySelectorAll('#registerForm .role-tab').forEach(t => t.classList.remove('active'));
+      e.target.classList.add('active');
+      currentRegRole = e.target.getAttribute('data-reg-role');
+    };
+  });
+
+  // Toast utility
+  function showToast(msg, type = 'info') {
+    const el = document.createElement('div');
+    el.className = `toast-item ${type}`;
+    el.textContent = msg;
+    toastContainer.appendChild(el);
+    setTimeout(() => el.remove(), 3500);
+  }
+
+  // Handle Login
+  document.getElementById('btnLogin').onclick = async () => {
+    const username = document.getElementById('loginUsername').value.trim();
+    const pass = document.getElementById('loginPass').value;
+
+    if (!username || !pass) return showToast('Please enter username and password', 'error');
+
+    try {
+      const data = await login(username, pass);
+      
+      // Role validation
+      const expectedRole = 'ROLE_' + currentRole.toUpperCase();
+      if (data.role !== expectedRole) {
+        return showToast(`Please select the correct role tab. Your role: ${data.role}`, 'error');
+      }
+
+      showToast(`Welcome back, ${data.username}! 🎉`, 'success');
+      setTimeout(() => window.location.href = 'index.html', 800);
+    } catch (err) {
+      showToast(err.message || 'Login failed. Make sure backend is running.', 'error');
+    }
+  };
+
+  // Handle Register
+  document.getElementById('btnRegister').onclick = async () => {
+    const username = document.getElementById('regUsername').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPass').value;
+
+    if (!username || !email || !pass) return showToast('Please fill all fields', 'error');
+
+    const mappedRole = currentRegRole === 'alumni' ? 'ROLE_ALUMNI' : 'ROLE_STUDENT';
+
+    try {
+      await register(username, email, pass, mappedRole);
+      showToast('Account created! Welcome 🎉', 'success');
+      document.getElementById('showLogin').click();
+      document.getElementById('loginUsername').value = username;
+      document.getElementById('loginPass').value = pass;
+    } catch (err) {
+      showToast(err.message || 'Registration failed.', 'error');
+    }
+  };
+
+  // Auto-redirect if already logged in
+  if (localStorage.getItem('jwt_token')) {
+    window.location.href = 'index.html';
+  }
+</script>
+</body>
+</html>
