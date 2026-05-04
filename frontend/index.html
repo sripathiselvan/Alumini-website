@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AlumniNexus – Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="scroll-progress"></div>
+
+  <div id="app">
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">⬡</div>
+        <div class="logo-text neon-text">AlumniNexus</div>
+      </div>
+
+      <div class="sidebar-user">
+        <div class="user-avatar" id="navAvatar">U</div>
+        <div class="user-info">
+          <div class="user-name" id="navName">Loading...</div>
+          <div class="user-role" id="navRole">Student</div>
+        </div>
+      </div>
+
+      <nav id="navMenu">
+        <a class="nav-item active" data-target="dashboard" onclick="navigate('dashboard')">
+          <span class="icon">📊</span> Dashboard
+        </a>
+        <a class="nav-item" data-target="about" onclick="navigate('about')">
+          <span class="icon">🛡️</span> About Security
+        </a>
+        <a class="nav-item" data-target="directory" onclick="navigate('directory')">
+          <span class="icon">👥</span> Alumni Directory
+        </a>
+        <a class="nav-item" data-target="projects" onclick="navigate('projects')">
+          <span class="icon">🚀</span> Projects
+        </a>
+        <a class="nav-item" data-target="feed" onclick="navigate('feed')">
+          <span class="icon">📰</span> News Feed
+        </a>
+        <a class="nav-item" data-target="jobs" onclick="navigate('jobs')">
+          <span class="icon">💼</span> Job Board
+        </a>
+        <a class="nav-item" data-target="blog" onclick="navigate('blog')">
+          <span class="icon">✍️</span> Blog & Insights
+        </a>
+        <a class="nav-item" data-target="events" onclick="navigate('events')">
+          <span class="icon">📅</span> Events
+        </a>
+        <a class="nav-item" data-target="certificates" onclick="navigate('certificates')">
+          <span class="icon">📜</span> Certifications
+        </a>
+        <a class="nav-item" data-target="connections" onclick="navigate('connections')">
+          <span class="icon">🤝</span> Connections
+        </a>
+        <a class="nav-item" data-target="contact" onclick="navigate('contact')">
+          <span class="icon">📧</span> Contact
+        </a>
+        <a class="nav-item" data-target="admin" id="adminNavItem" onclick="navigate('admin')" style="display:none;">
+          <span class="icon">🛡️</span> Admin Panel
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <button class="btn-logout" onclick="doLogout()">⬢ TERMINATE SESSION</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content">
+      <!-- TOPBAR -->
+      <header id="topbar">
+        <div class="page-title" id="pageTitle">Dashboard</div>
+        <div class="topbar-actions">
+          <button class="icon-btn">🔔</button>
+          <button class="icon-btn" onclick="openProfileModal()">👤</button>
+        </div>
+      </header>
+
+      <!-- PAGE CONTAINER -->
+      <div class="page-container">
+
+        <!-- DASHBOARD PAGE -->
+        <section class="page active" id="page-dashboard">
+          <div class="welcome-banner" style="margin-bottom: 4rem; position: relative;">
+            <div style="display: flex; flex-direction: column; gap: 1.5rem; max-width: 800px;">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neon-purple/30 bg-neon-purple/10 text-xs font-mono text-emerald-400" 
+                   style="display:inline-flex; border-radius:20px; border:1px solid var(--dark-border); padding: 0.3rem 1rem; width: fit-content;">
+                <span style="width:8px; height:8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; animation: pulse-glow 2s infinite;"></span>
+                NETWORK CONNECTION SECURED // <span id="welcomeName">User</span>
+              </div>
+              
+              <h1 style="font-size: 4.5rem; line-height: 1.1; margin: 0;">
+                <span class="neon-text-glow">Alumni</span><br>
+                <span class="neon-text">Nexus.</span>
+              </h1>
+              
+              <p style="font-size: 1.25rem; color: var(--text-muted); max-width: 600px; line-height: 1.7;">
+                The premier intelligence and networking platform for the Mahalingam College of Engineering and Technology ecosystem. 
+                Connect with industry leaders, secure opportunities, and bridge the gap between generations.
+              </p>
+
+              <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top: 0.5rem;">
+                <span class="nav-item" style="padding: 0.4rem 1rem; background: rgba(255,255,255,0.03); font-size: 0.75rem; border: 1px solid var(--dark-border);">VAPT</span>
+                <span class="nav-item" style="padding: 0.4rem 1rem; background: rgba(255,255,255,0.03); font-size: 0.75rem; border: 1px solid var(--dark-border);">RECON</span>
+                <span class="nav-item" style="padding: 0.4rem 1rem; background: rgba(255,255,255,0.03); font-size: 0.75rem; border: 1px solid var(--dark-border);">EXPLOIT</span>
+                <span class="nav-item" style="padding: 0.4rem 1rem; background: rgba(255,255,255,0.03); font-size: 0.75rem; border: 1px solid var(--dark-border);">SECURE</span>
+              </div>
+
+              <div style="display:flex; gap:1.5rem; margin-top:1.5rem;">
+                <button class="btn-primary" style="padding: 1rem 2rem;" onclick="navigate('directory')">Explore Network →</button>
+                <button class="neon-btn" style="background:transparent; border-color: rgba(255,255,255,0.1);" onclick="navigate('projects')">Research Hub</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid-4 stats-grid">
+            <div class="stat-card">
+              <div class="stat-title">Total Members</div>
+              <div class="stat-value" id="dashStatUsers">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Job Postings</div>
+              <div class="stat-value" id="dashStatJobs">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Upcoming Events</div>
+              <div class="stat-value" id="dashStatEvents">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Connections</div>
+              <div class="stat-value" id="dashStatConnections">—</div>
+            </div>
+          </div>
+
+          <div class="grid-2 mt-2">
+            <div class="card panel glass-panel">
+              <h3>Recent Activity</h3>
+              <div class="empty-state">No recent activity found.</div>
+            </div>
+            <div class="card panel glass-panel">
+              <h3>Upcoming Events</h3>
+              <div class="empty-state">No events scheduled.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ABOUT PAGE -->
+        <section class="page" id="page-about">
+          <div class="welcome-banner">
+            <div
+              class="inline-block px-4 py-1 rounded-full border border-neon-cyan/30 bg-neon-cyan/6 text-neon-cyan font-mono text-xs mb-6"
+              style="display:inline-block; border-radius:20px; border:1px solid var(--dark-border); padding: 0.2rem 0.8rem; color: var(--neon-cyan);">
+              // 01. WHAT WE DO
+            </div>
+            <h2 class="text-3xl md:text-4xl font-display font-bold mb-8">
+              Empowering the <span class="neon-text">Cyber</span> Generation
+            </h2>
+            <p class="text-muted">AlumniNexus is more than just a directory. It is a tactical hub for collaboration,
+              security research, and career acceleration.</p>
+          </div>
+
+          <div class="grid-2 mt-2">
+            <div class="card panel">
+              <h3 style="color:var(--neon-purple);">🛡️ Offensive Security</h3>
+              <p class="text-muted">Engage in penetration testing challenges, share VAPT findings, and collaborate on
+                exploit development within a secure environment.</p>
+            </div>
+            <div class="card panel">
+              <h3 style="color:var(--neon-cyan);">🔒 Defensive Architecture</h3>
+              <p class="text-muted">Discuss secure-first development, threat modeling, and hardening strategies with
+                industry experts and senior alumni.</p>
+            </div>
+          </div>
+
+          <div class="card panel mt-2">
+            <h3>Tactical Tools & Stack</h3>
+            <div class="grid-4" style="text-align:center; gap: 1rem;">
+              <div class="stat-card">
+                <div style="font-size:1.5rem;">🛠️</div>
+                <div class="stat-title" style="margin:0.5rem 0;">Burp Suite</div>
+              </div>
+              <div class="stat-card">
+                <div style="font-size:1.5rem;">🕵️</div>
+                <div class="stat-title" style="margin:0.5rem 0;">Metasploit</div>
+              </div>
+              <div class="stat-card">
+                <div style="font-size:1.5rem;">📡</div>
+                <div class="stat-title" style="margin:0.5rem 0;">Wireshark</div>
+              </div>
+              <div class="stat-card">
+                <div style="font-size:1.5rem;">🛡️</div>
+                <div class="stat-title" style="margin:0.5rem 0;">Nmap</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PROJECTS PAGE -->
+        <section class="page" id="page-projects">
+          <h2>Security Projects & Writeups</h2>
+          <p class="text-muted">Showcasing real-world security work and vulnerability research.</p>
+
+          <div class="grid-2 mt-2">
+            <div class="card panel glass-panel">
+              <div
+                style="height:200px; background:rgba(168, 85, 247, 0.1); border-radius:15px; margin-bottom:1.5rem; display:flex; align-items:center; justify-content:center; font-size:3rem;">
+                📁</div>
+              <h3 style="margin-bottom:0.5rem;">Automated Vulnerability Scanner</h3>
+              <p class="text-muted" style="font-size:0.9rem; margin-bottom:1.5rem;">A Python-based tool for rapid
+                reconnaissance and automated CVE detection in web applications.</p>
+              <button class="neon-btn" style="width:100%;">View Repository →</button>
+            </div>
+            <div class="card panel glass-panel">
+              <div
+                style="height:200px; background:rgba(34, 211, 238, 0.1); border-radius:15px; margin-bottom:1.5rem; display:flex; align-items:center; justify-content:center; font-size:3rem;">
+                🔍</div>
+              <h3 style="margin-bottom:0.5rem;">Active Directory Lab Writeup</h3>
+              <p class="text-muted" style="font-size:0.9rem; margin-bottom:1.5rem;">Step-by-step documentation of
+                compromising a mock AD environment using Kerberoasting and Relay attacks.</p>
+              <button class="neon-btn" style="width:100%;">Read Writeup →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- BLOG PAGE -->
+        <section class="page" id="page-blog">
+          <h2>Blog & Insights</h2>
+          <p class="text-muted">Deep dives into the latest security trends and platform updates.</p>
+
+          <div style="display:flex; flex-direction:column; gap:1.5rem; margin-top:2rem;">
+            <div class="card panel">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <span class="user-role">SECURITY ADVISORY</span>
+                <span class="text-muted" style="font-size:0.8rem;">MAY 24, 2026</span>
+              </div>
+              <h3>The Rise of AI-Driven Social Engineering</h3>
+              <p class="text-muted">Exploring how Large Language Models are being utilized to create hyper-personalized
+                phishing campaigns and how to defend against them...</p>
+              <a href="#" style="display:inline-block; margin-top:1rem; font-weight:600;">Read More →</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- CERTIFICATES PAGE -->
+        <section class="page" id="page-certificates">
+          <h2>Professional Certifications</h2>
+          <p class="text-muted">Verified achievements from our alumni network.</p>
+
+          <div class="grid-4 mt-2">
+            <div class="stat-card" style="text-align:center;">
+              <div style="font-size:2.5rem; margin-bottom:1rem;">🏅</div>
+              <div style="font-weight:700; color:#fff;">OSCP</div>
+              <div style="font-size:0.7rem; color:var(--neon-purple); font-weight:800; margin-top:0.5rem;">OFFENSIVE
+                SECURITY</div>
+            </div>
+            <div class="stat-card" style="text-align:center;">
+              <div style="font-size:2.5rem; margin-bottom:1rem;">🏅</div>
+              <div style="font-weight:700; color:#fff;">CISSP</div>
+              <div style="font-size:0.7rem; color:var(--neon-cyan); font-weight:800; margin-top:0.5rem;">ISC2</div>
+            </div>
+            <div class="stat-card" style="text-align:center;">
+              <div style="font-size:2.5rem; margin-bottom:1rem;">🏅</div>
+              <div style="font-weight:700; color:#fff;">CEH</div>
+              <div style="font-size:0.7rem; color:var(--neon-pink); font-weight:800; margin-top:0.5rem;">EC-COUNCIL
+              </div>
+            </div>
+            <div class="stat-card" style="text-align:center;">
+              <div style="font-size:2.5rem; margin-bottom:1rem;">🏅</div>
+              <div style="font-weight:700; color:#fff;">Security+</div>
+              <div style="font-size:0.7rem; color:var(--neon-purple); font-weight:800; margin-top:0.5rem;">COMPTIA</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CONTACT PAGE -->
+        <section class="page" id="page-contact">
+          <div class="grid-2">
+            <div>
+              <h2>Open a Secure Channel</h2>
+              <p class="text-muted mt-2">Have a question or looking to collaborate? Send an encrypted message to the
+                platform admins.</p>
+
+              <div style="margin-top:3rem;">
+                <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+                  <div class="icon-btn">📍</div>
+                  <div>
+                    <div style="font-weight:600;">Location</div>
+                    <div class="text-muted">Global Cyber Network</div>
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; gap:1rem;">
+                  <div class="icon-btn">📧</div>
+                  <div>
+                    <div style="font-weight:600;">Email</div>
+                    <div class="text-muted">secure@alumninexus.com</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card panel">
+              <div class="form-group">
+                <label>Subject</label>
+                <input type="text" class="inp" placeholder="e.g. Collaboration Inquiry">
+              </div>
+              <div class="form-group">
+                <label>Message</label>
+                <textarea class="inp" rows="5" placeholder="Type your message here..."></textarea>
+              </div>
+              <button class="btn-primary" style="width:100%;">Transmit Message →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- DIRECTORY PAGE -->
+        <section class="page" id="page-directory">
+          <h2>Alumni Directory</h2>
+          <p class="text-muted">Search and connect with fellow alumni.</p>
+          <div class="search-box mt-2">
+            <input type="text" id="dirSearch" placeholder="Search by name, company, or skills..." class="inp"
+              onkeyup="if(event.key==='Enter') window.loadDirectory()">
+            <button class="btn-primary" style="width: auto;" onclick="window.loadDirectory()">Search</button>
+          </div>
+          <div id="directoryGrid" class="grid-4 mt-2">
+            <!-- Profiles injected here -->
+          </div>
+        </section>
+
+        <!-- FEED PAGE -->
+        <section class="page" id="page-feed">
+          <h2>News Feed</h2>
+          <p class="text-muted">See what's happening in your network.</p>
+
+          <!-- Compose Box -->
+          <div class="card panel mt-2" style="padding: 1.5rem;">
+            <textarea id="postContent" class="inp" rows="3" placeholder="Share an update, achievement, or news..."
+              style="resize:none;"></textarea>
+            <div style="display:flex; justify-content:flex-end; margin-top:1rem;">
+              <button class="btn-primary" onclick="submitPost()">Post Update</button>
+            </div>
+          </div>
+
+          <!-- Feed Grid -->
+          <div id="feedGrid" style="display:flex; flex-direction:column; gap:1rem; margin-top:2rem;">
+            <div class="empty-state">Loading posts...</div>
+          </div>
+        </section>
+
+        <!-- JOBS PAGE -->
+        <section class="page" id="page-jobs">
+          <div
+            style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+            <div>
+              <h2 style="margin-bottom:0.25rem;">Job Board</h2>
+              <p class="text-muted">Discover and share career opportunities across the network.</p>
+            </div>
+            <button class="btn-primary" style="width:auto; padding:0.75rem 1.5rem;" onclick="openJobModal()">+ Post a
+              Job</button>
+          </div>
+          <div class="search-box" style="margin-bottom:2rem;">
+            <input type="text" id="jobSearch" placeholder="Search by title or company..." class="inp"
+              style="margin-bottom:0;" onkeyup="if(event.key==='Enter') window.loadJobs()">
+            <button class="btn-primary" style="width:auto;" onclick="window.loadJobs()">Search</button>
+          </div>
+          <div id="jobGrid" style="display:flex; flex-direction:column; gap:1rem;">
+            <div class="empty-state">Loading jobs...</div>
+          </div>
+        </section>
+
+        <!-- EVENTS PAGE -->
+        <section class="page" id="page-events">
+          <div
+            style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;">
+            <div>
+              <h2 style="margin-bottom:0.25rem;">Events Calendar</h2>
+              <p class="text-muted">Stay connected through reunions, seminars, and webinars.</p>
+            </div>
+            <button class="btn-primary" style="width:auto; padding:0.75rem 1.5rem;" onclick="openEventModal()">+ Create
+              Event</button>
+          </div>
+          <div id="eventGrid" style="display:flex; flex-direction:column; gap:1rem;">
+            <div class="empty-state">Loading events...</div>
+          </div>
+        </section>
+
+        <!-- CONNECTIONS PAGE -->
+        <section class="page" id="page-connections">
+          <div style="margin-bottom:2rem;">
+            <h2 style="margin-bottom:0.25rem;">My Connections</h2>
+            <p class="text-muted">Manage your network and incoming connection requests.</p>
+          </div>
+
+          <!-- Pending Requests -->
+          <div class="card panel" style="margin-bottom:1.5rem;">
+            <h3 style="display:flex; align-items:center; gap:0.75rem;">
+              📬 Pending Requests
+              <span id="pendingCount"
+                style="background:var(--primary); color:#fff; font-size:0.75rem; padding:0.15rem 0.6rem; border-radius:20px;">0</span>
+            </h3>
+            <div id="pendingGrid" style="display:flex; flex-direction:column; gap:0.75rem; margin-top:1rem;">
+              <div class="empty-state">No pending requests.</div>
+            </div>
+          </div>
+
+          <!-- Accepted Connections -->
+          <div>
+            <h3 style="margin-bottom:1rem;">🤝 My Network</h3>
+            <div id="connectionsGrid" class="grid-4">
+              <div style="grid-column: 1 / -1;" class="empty-state">No connections yet. Visit the Alumni Directory to
+                connect!</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ADMIN PAGE -->
+        <section class="page" id="page-admin">
+          <div style="margin-bottom:2rem;">
+            <h2 style="margin-bottom:0.25rem;">🛡️ Admin Panel</h2>
+            <p class="text-muted">Platform oversight and content moderation.</p>
+          </div>
+
+          <!-- Stats Row -->
+          <div class="grid-4" style="margin-bottom:2rem;">
+            <div class="stat-card">
+              <div class="stat-title">Total Users</div>
+              <div class="stat-value" id="adminStatUsers">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Total Posts</div>
+              <div class="stat-value" id="adminStatPosts">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Total Jobs</div>
+              <div class="stat-value" id="adminStatJobs">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-title">Total Events</div>
+              <div class="stat-value" id="adminStatEvents">—</div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+            <button class="btn-primary" style="width:auto;" onclick="window.adminShowTab('users')">👤 Users</button>
+            <button class="btn-primary" style="width:auto; background:var(--surface);"
+              onclick="window.adminShowTab('posts')">📝 Moderate Posts</button>
+          </div>
+
+          <div id="adminUsersTab">
+            <div id="adminUsersGrid" style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div class="empty-state">Loading users...</div>
+            </div>
+          </div>
+          <div id="adminPostsTab" style="display:none;">
+            <div id="adminPostsGrid" style="display:flex; flex-direction:column; gap:0.75rem;">
+              <div class="empty-state">Loading posts...</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- POST A JOB MODAL -->
+  <div id="jobModal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Post a Job</h3>
+        <button class="icon-btn" onclick="closeJobModal()" style="background:none;border:none;">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Job Title *</label>
+            <input type="text" id="jobTitle" class="inp" placeholder="e.g. Software Engineer">
+          </div>
+          <div class="form-group">
+            <label>Company *</label>
+            <input type="text" id="jobCompany" class="inp" placeholder="e.g. Google">
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="jobLocation" class="inp" placeholder="e.g. Bangalore, India or Remote">
+          </div>
+          <div class="form-group">
+            <label>Job Type</label>
+            <select id="jobType" class="inp">
+              <option value="FULL_TIME">Full Time</option>
+              <option value="PART_TIME">Part Time</option>
+              <option value="INTERNSHIP">Internship</option>
+              <option value="REMOTE">Remote</option>
+              <option value="CONTRACT">Contract</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="jobDescription" class="inp" rows="4"
+            placeholder="Describe the role, responsibilities, requirements..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Apply Link (URL or Email)</label>
+          <input type="text" id="jobApplyLink" class="inp" placeholder="https://... or hr@company.com">
+        </div>
+        <button class="btn-primary" onclick="submitJob()">Post Job</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CREATE EVENT MODAL -->
+  <div id="eventModal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Create Event</h3>
+        <button class="icon-btn" onclick="closeEventModal()" style="background:none;border:none;">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Event Title *</label>
+          <input type="text" id="eventTitle" class="inp" placeholder="e.g. Alumni Annual Reunion 2026">
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Date & Time *</label>
+            <input type="datetime-local" id="eventDate" class="inp">
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="eventLocation" class="inp" placeholder="e.g. Main Auditorium or Online">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Organizer</label>
+          <input type="text" id="eventOrganizer" class="inp" placeholder="e.g. Alumni Association">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="eventDescription" class="inp" rows="3" placeholder="What's this event about?"></textarea>
+        </div>
+        <button class="btn-primary" onclick="submitEvent()">Create Event</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div id="profileModal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Edit Profile</h3>
+        <button class="icon-btn" onclick="closeProfileModal()" style="background:none;border:none;">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="profName" class="inp">
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <input type="text" id="profDept" class="inp">
+          </div>
+          <div class="form-group">
+            <label>Batch Year</label>
+            <input type="text" id="profBatch" class="inp">
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" id="profLoc" class="inp">
+          </div>
+          <div class="form-group">
+            <label>Company</label>
+            <input type="text" id="profComp" class="inp">
+          </div>
+          <div class="form-group">
+            <label>Designation</label>
+            <input type="text" id="profDesig" class="inp">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Skills (comma separated)</label>
+          <input type="text" id="profSkills" class="inp">
+        </div>
+        <div class="form-group">
+          <label>Bio</label>
+          <textarea id="profBio" class="inp" rows="3"></textarea>
+        </div>
+        <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/ui-enhancements.js"></script>
+  <script src="assets/js/ui-effects.js"></script>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+
+</html>
